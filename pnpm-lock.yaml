@@ -31,6 +31,12 @@ importers:
         specifier: workspace:*
         version: link:../../packages/typescript-config
 
+  apps/processor:
+    devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
+
   packages/db:
     dependencies:
       '@types/node':
