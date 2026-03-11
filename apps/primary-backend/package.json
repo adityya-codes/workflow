@@ -1,5 +1,5 @@
 {
-  "name": "processor",
+  "name": "primary-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,12 +8,12 @@
   },
   "keywords": [],
   "author": "",
+  "license": "ISC",
   "devDependencies": {
     "@repo/db": "workspace:*",
     "@repo/typescript-config": "workspace:*"
   },
-  "license": "ISC",
   "dependencies": {
-    "kafkajs": "^2.2.4"
+    "zod": "^4.3.6"
   }
 }
