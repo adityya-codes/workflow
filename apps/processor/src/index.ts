@@ -1,9 +1,7 @@
 import prisma from "@repo/db";
-import {Kafka} from "kafkajs";
+import { Kafka } from "kafkajs";
 
 const TOPIC_NAME = "zap-events"
-
-const client = prisma;
 
 const kafka = new Kafka({
     clientId: 'outbox-processor',
@@ -11,35 +9,38 @@ const kafka = new Kafka({
 })
 
 async function main() {
-    const producer =  kafka.producer();
+    const producer = kafka.producer();
     await producer.connect();
 
-    while(1) {
-        const pendingRows = await client.zapRunOutbox.findMany({
-            where :{},
+   try {
+    while (1) {
+        const pendingRows = await prisma.zapRunOutbox.findMany({
+            where: {},
             take: 10
         })
         console.log(pendingRows);
 
-        producer.send({
+        await producer.send({
             topic: TOPIC_NAME,
-            messages: pendingRows.map((r:any) => {
+            messages: pendingRows.map((r: any) => {
                 return {
                     value: JSON.stringify({ zapRunId: r.zapRunId, stage: 0 })
                 }
             })
-        })  
+        })
 
-        await client.zapRunOutbox.deleteMany({
+        await prisma.zapRunOutbox.deleteMany({
             where: {
                 id: {
-                    in: pendingRows.map((x:any) => x.id)
+                    in: pendingRows.map((x: any) => x.id)
                 }
             }
         })
 
         await new Promise(r => setTimeout(r, 3000));
     }
-}
+} catch (e) {
+    console.log(e);
+}}
 
 main();
