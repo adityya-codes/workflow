@@ -1,13 +1,13 @@
 require('dotenv').config()
 
-import { PrismaClient } from "@prisma/client";
-import { JsonObject } from "@prisma/client/runtime/library";
+
 import { Kafka } from "kafkajs";
 import { parse } from "./parser";
 import { sendEmail } from "./email";
 import { sendSol } from "./solana";
+import prisma from "@repo/db";
+import { JsonObject } from "../../../packages/db/src/generated/prisma/internal/prismaNamespace";
 
-const prismaClient = new PrismaClient();
 const TOPIC_NAME = "zap-events"
 
 const kafka = new Kafka({
@@ -39,7 +39,7 @@ async function main() {
           const zapRunId = parsedValue.zapRunId;
           const stage = parsedValue.stage;
 
-          const zapRunDetails = await prismaClient.zapRun.findFirst({
+          const zapRunDetails = await prisma.zapRun.findFirst({
             where: {
               id: zapRunId
             },
@@ -55,7 +55,7 @@ async function main() {
               },
             }
           });
-          const currentAction = zapRunDetails?.zap.actions.find(x => x.sortingOrder === stage);
+          const currentAction = zapRunDetails?.zap.actions.find((x: any) => x.sortingOrder === stage);
 
           if (!currentAction) {
             console.log("Current action not found?");
