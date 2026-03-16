@@ -7,4 +7,16 @@ router.post("/create", (req, res) => {
     
 })
 
+router.get("/zaps", (req, res) => {
+    
+})
+
+router.get("/zap/:id", (req, res) => {
+    
+})
+
+router.post("/zap/:id/trigger", (req, res) => {
+    
+})
+
 export const zapRouter : Router = router;
