@@ -1,7 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation"
-import { LinkButton } from "./buttons/LinkButton"
-import { PrimaryButton } from "./buttons/PrimaryButton";
+import { LinkButton } from "./Buttons/LinkButton"
+import { PrimaryButton } from "./Buttons/PrimaryButton";
+PrimaryButton
 
 export const Appbar = () => {
     const router = useRouter();
